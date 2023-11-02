@@ -71,7 +71,7 @@ router.put('/:id', (req, res, next) => {
     }else{
         res.status(404).json({message: `Tweet id(${id}) not found`});
     }
-})
+});
 
 // DELETE 방식의 / tweets/:id
 router.delete('/:id',(req, res, next) => {
