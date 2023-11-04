@@ -14,7 +14,6 @@ let tweets = [
         name: '반하나',
         username: 'banana',
         url: 'https://i.pinimg.com/originals/a8/dc/63/a8dc63c8abeeb6708dbec6ef3009608a.jpg'
-
     }
 ];
 
@@ -27,23 +26,22 @@ export async function getAllByUsername(username){
 }
 
 export async function getById(id){
-    return tweets.find((tweet) => tweet.id === id);
+    return tweets.find((tweet) => tweet.id === id)
 }
 
-export async function create(text, name, username) {
+export async function create(text, name, username){
     const tweet = {
         id: '10',
         text,
-        createdAt: Date.now().toString(),
+        createAt: Date.now().toString(),
         name,
         username
-        // key와 값의 이름이 같다면 생략 가능. name : name, => name,
     };
     tweets = [tweet, ...tweets];
     return tweets;
 }
 
-export async function update(id, text){
+export async function update(id, text) {
     const tweet = tweets.find((tweet) => tweet.id === id);
     if (tweet) {
         tweet.text = text;
@@ -52,5 +50,6 @@ export async function update(id, text){
 }
 
 export async function remove(id) {
-    tweets = tweets.filter((tweet) => tweet.id !== id);
+    tweets = tweets.filter((tweet)=> tweet.id !== id)
+    return tweets
 }

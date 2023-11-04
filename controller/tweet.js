@@ -1,6 +1,6 @@
-import * as tweetRepository from '../data/tweet.js';
+import * as tweetRepository from '../data/tweet.js'
 
-export async function getTweets(req,res) {
+export async function getTweets(req, res) {
     const username = req.query.username;
     const data = await (username
         ? tweetRepository.getAllByUsername(username)
@@ -18,8 +18,8 @@ export async function getTweet(req, res, next) {
     }
 }
 
-export async function createTweet(req, res, next){
-    const { text, name, username } = req.body;
+export async function createTweet(req, res, next) {
+    const {text, name, username} = req.body;
     const tweet = await tweetRepository.create(text, name, username);
     res.status(201).json(tweet);
 }
@@ -31,12 +31,13 @@ export async function updateTweet(req, res, next) {
     if (tweet) {
         res.status(201).json(tweet);
     }else{
-        res.status(404).json({message: `Tweet id(${id}) not found`});
+        res.status(404).json({message: `Tweet id(${id}) not found`})
     }
-}
+};
 
-export async function deleteTweet(req, res, next) {
+export async function deleteTweet(req, res, next){
     const id = req.params.id;
-    await tweetRepository.remove(id)
-    res.sendStatus(204)
+    const tweets = await tweetRepository.remove(id)
+    res.status(201).json(tweets)
 }
+// 204번으로 하면 메세지 전달 불가.
