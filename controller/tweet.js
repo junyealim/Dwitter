@@ -19,25 +19,35 @@ export async function getTweet(req, res, next) {
 }
 
 export async function createTweet(req, res, next) {
-    const {text, name, username} = req.body;
-    const tweet = await tweetRepository.create(text, name, username);
+    const {text} = req.body;
+    const tweet = await tweetRepository.create(text, req.userId);
     res.status(201).json(tweet);
 }
 
 export async function updateTweet(req, res, next) {
-    const id = req.params.id;
+    const id = req.params.id
     const text = req.body.text;
-    const tweet = await tweetRepository.update(id, text)
-    if (tweet) {
-        res.status(201).json(tweet);
-    }else{
+    const tweet = await tweetRepository.getById(id);
+    if (!tweet) {
         res.status(404).json({message: `Tweet id(${id}) not found`})
     }
+    if(tweet.userId !== req.userId){
+        return res.status(403).json({message: `권한 없음!`})
+    }
+    const updated = await tweetRepository.update(id, text)
+    res.status(200).json(updated);
 };
 
 export async function deleteTweet(req, res, next){
     const id = req.params.id;
-    const tweets = await tweetRepository.remove(id)
-    res.status(201).json(tweets)
+    const tweet = await tweetRepository.getById(id);
+    if (!tweet) {
+        res.status(404).json({message: `Tweet id(${id}) not found`})
+    }
+    if(tweet.userId !== req.userId){
+        return res.status(403).json({message: `권한 없음!`})
+    }
+    await tweetRepository.remove(id)
+    res.status(204)
 }
 // 204번으로 하면 메세지 전달 불가.

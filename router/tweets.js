@@ -2,6 +2,7 @@ import express from "express";
 import * as tweetController from '../controller/tweet.js';
 import { body } from "express-validator";
 import { validate } from "../middleware/validator.js";
+import { isAuth } from '../middleware/auth.js'
 
 const router = express.Router();
 
@@ -12,19 +13,19 @@ const validateTweet = [
 
 // GET / Tweets
 // GET / Tweets?username=:username
-router.get('/', tweetController.getTweets)
+router.get('/', isAuth, tweetController.getTweets)
 
 // GET / Tweets/:id
-router.get('/:id', tweetController.getTweet)
+router.get('/:id',isAuth, tweetController.getTweet)
 
 // POST / Tweets
-router.post('/', validateTweet, tweetController.createTweet)
+router.post('/',isAuth, validateTweet, tweetController.createTweet)
 
 // PUT / Tweets/:id
-router.put('/:id', validateTweet, tweetController.updateTweet)
+router.put('/:id',isAuth, validateTweet, tweetController.updateTweet)
 
 // DELETE / Tweets/:id
-router.delete('/:id', tweetController.deleteTweet)
+router.delete('/:id', isAuth, tweetController.deleteTweet)
 
 
 export default router;

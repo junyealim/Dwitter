@@ -1,17 +1,34 @@
 import express from "express";
 import { body } from "express-validator";
-import * as authController from '../controller/auth.js';
 import { validate } from "../middleware/validator.js";
+import * as authController from '../controller/auth.js';
+import { isAuth } from '../middleware/auth.js'
 
 const router = express.Router();
 
+const validateCredential = [
+    body('username')
+        .trim()
+        .notEmpty()
+        .withMessage('username은 반드시 입력해야 함'),
+    body('password')
+        .trim()
+        .isLength({min:4})
+        .withMessage('password는 반드시 4자 이상이어야 함'),
+    validate
+];
+
 const validateSignup = [
-    body('username').trim().isLength({min: 3}).withMessage('최소 3자 이상 입력!'),body('password').trim().isLength({min:6}).withMessage('최소 6자 이상 입력!'),body('email').trim().isEmail().withMessage('이메일 형식 확인!'),validate
+    ...validateCredential,
+    body('name').notEmpty().withMessage('name은 반드시 입력'),
+    body('email').isEmail().withMessage('email 형식 확인'),
+    body('url').isURL().withMessage("URL 형식 확인").optional({nullable: true, checkFalsy: true}),
+    validate
 ]
 
 router.post('/signup',validateSignup ,authController.signup)
 
-router.post('/login',authController.login)
+router.post('/login',validateCredential, authController.login)
 
-router.get('/me',authController.verify)
+router.get('/me', isAuth, authController.me)
 export default router;
