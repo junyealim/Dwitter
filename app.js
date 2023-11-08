@@ -1,5 +1,6 @@
 import express from "express";
 import morgan from "morgan";
+import cors from 'cors';
 import tweetsRouter from './router/tweets.js';
 import authRouter from './router/auth.js';
 // import dotenv from 'dotenv';
@@ -11,6 +12,7 @@ const app = express();
 
 app.use(express.json());
 app.use(morgan("dev"));
+app.use(cors());
 
 // 라우터
 app.use('/tweets', tweetsRouter)
