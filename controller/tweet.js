@@ -50,6 +50,6 @@ export async function deleteTweet(req, res, next){
         return res.status(403).json({message: `권한 없음!`})
     }
     await tweetRepository.remove(id)
-    res.status(204)
+    return res.status(204)
 }
 // 204번으로 하면 메세지 전달 불가.
