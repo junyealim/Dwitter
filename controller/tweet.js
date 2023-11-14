@@ -44,12 +44,12 @@ export async function deleteTweet(req, res, next){
     const id = req.params.id;
     const tweet = await tweetRepository.getById(id);
     if (!tweet) {
-        res.status(404).json({message: `Tweet id(${id}) not found`})
+        return res.status(404).json({message: `Tweet id(${id}) not found`})
     }
     if(tweet.userId !== req.userId){
         return res.status(403).json({message: `권한 없음!`})
     }
     await tweetRepository.remove(id)
-    return res.status(204)
+    res.sendStatus(204)
 }
 // 204번으로 하면 메세지 전달 불가.
