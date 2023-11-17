@@ -47,9 +47,9 @@ export async function deleteTweet(req, res, next){
         res.status(404).json({message: `Tweet id(${id}) not found`})
     }
     if(tweet.userId !== req.userId){
-        return res.status(403).json({message: `권한 없음!`})
+        return res.sendStatus(403)
     }
     await tweetRepository.remove(id)
-    return res.status(204)
+    return res.sendStatus(204)
 }
 // 204번으로 하면 메세지 전달 불가.
